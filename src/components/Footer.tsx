@@ -28,6 +28,7 @@ export default function Footer() {
                 { label: '홈', href: '/' },
                 { label: '회사소개', href: '/about' },
                 { label: '서비스 안내', href: '/services' },
+                { label: '시공사례', href: '/portfolio' },
                 { label: '문의하기', href: '/contact' },
               ].map((item) => (
                 <li key={item.href}>
