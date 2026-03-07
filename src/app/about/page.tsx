@@ -1,65 +1,6 @@
 import Image from 'next/image';
 
-function CheckIcon() {
-  return (
-    <svg className="w-5 h-5 text-amber shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
 export default function About() {
-  const values = [
-    {
-      title: '안전',
-      desc: 'KC안전인증 기준을 초과하는 안전 규정 준수. 무사고 기록 유지.',
-      icon: (
-        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-      ),
-      number: '01',
-    },
-    {
-      title: '신속성',
-      desc: '24시간 신속한 배차와 즉각적인 대응. 전화 후 30분 내 출동.',
-      icon: (
-        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-        </svg>
-      ),
-      number: '02',
-    },
-    {
-      title: '전문성',
-      desc: '15년 이상의 경험 있는 전문 기술자. 어떤 현장이든 안전하게.',
-      icon: (
-        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" />
-        </svg>
-      ),
-      number: '03',
-    },
-    {
-      title: '신뢰',
-      desc: '고객 만족을 최우선으로 하는 서비스. 99% 고객 만족도 달성.',
-      icon: (
-        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
-        </svg>
-      ),
-      number: '04',
-    },
-  ];
-
-  const timeline = [
-    { year: '2009', title: '회사 설립', desc: '청주 지역에서 고소작업차 렌탈 사업 시작' },
-    { year: '2012', title: 'KC안전인증 획득', desc: '국내 최고 기준의 안전 인증 취득' },
-    { year: '2016', title: '장비 확대', desc: '25톤 크레인을 포함한 다양한 장비 추가' },
-    { year: '2020', title: '지역 최고 평가', desc: '고객 만족도 99% 달성' },
-    { year: '2024', title: '기술력 강화', desc: '최신 안전 기술과 IoT 시스템 도입' },
-  ];
-
   return (
     <div>
       {/* Hero */}
@@ -68,151 +9,86 @@ export default function About() {
         <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/98 via-navy/90 to-navy/60" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 w-full">
           <p className="text-amber font-semibold text-sm tracking-wider uppercase mb-4 animate-fade-in-up">About Us</p>
-          <h1 className="text-5xl md:text-6xl font-black text-white mb-6 animate-fade-in-up delay-100">
-            신뢰로 세워진<br /><span className="text-gradient">15년의 역사</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up delay-100">
+            청주 지역 고소작업의 기준,<br /><span className="text-gradient">청주 스카이차</span>
           </h1>
-          <p className="text-gray-300 text-lg max-w-lg animate-fade-in-up delay-200">
-            청주 지역 고소작업차 전문 렌탈 업체로서 안전과 신뢰를 최우선 가치로 삼고 있습니다.
+          <p className="text-gray-300 text-lg max-w-2xl animate-fade-in-up delay-200">
+            청주스카이차는 청주를 중심으로 충북 전 지역에서 스카이차·사다리차 고소작업 서비스를 제공하는 전문 업체입니다.
           </p>
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Main Content */}
       <section className="py-24 md:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div>
-              <p className="text-amber font-semibold text-sm tracking-wider uppercase mb-3">Our Mission</p>
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">우리의 사명</h2>
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                청주스카이차는 고객의 신뢰를 바탕으로 최고 품질의 고소작업차 렌탈 서비스를 제공하는 것을 사명으로 삼고 있습니다.
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
+            {/* Text */}
+            <div className="lg:col-span-3 space-y-8">
+              <div>
+                <div className="w-12 h-1 bg-amber rounded-full mb-8" />
+                <p className="text-gray-700 text-lg leading-[1.9]">
+                  청주스카이차는 청주를 중심으로 충북 전 지역에서 스카이차와 사다리차를 활용한 각종 고소작업 서비스를 제공하는 전문 업체로
+                  간판 설치 및 철거, 외벽 공사, 유리 시공, 페인트 도장, 방수 작업, 건물 외벽 청소, 조립식 건물 및 판넬 시공,
+                  각종 건축 자재 상·하차, 촬영 및 특수 작업 등 다양한 현장 업무를 안전하고 체계적으로 수행하고 있습니다.
+                </p>
+              </div>
+
+              <p className="text-gray-700 text-lg leading-[1.9]">
+                오랜 기간 현장에서 축적해온 실무 경험과 노하우를 바탕으로 숙련된 전문 기사들이 직접 장비를 운용하며,
+                단순히 장비만 제공하는 방식이 아닌 현장 조건과 작업 목적에 맞춘 맞춤형 작업 방식을 제안함으로써
+                작업 효율을 높이고 불필요한 위험 요소를 최소화하고 있습니다. 모든 작업은 사전 상담과 현장 상황 분석을 통해 진행되며,
+                작업 높이와 접근성, 주변 구조물 및 도로 환경 등을 종합적으로 고려하여 가장 적합한 장비와 공법을
+                선택함으로써 공사 시간 단축과 비용 절감을 동시에 실현하고 있습니다.
               </p>
-              <p className="text-gray-600 text-lg leading-relaxed mb-10">
-                안전과 신속성, 합리적 가격으로 지역 발전에 기여하며 고객 만족도 최우선의 경영 철학을 실천합니다.
+
+              <p className="text-gray-700 text-lg leading-[1.9]">
+                청주스카이차는 자동 수평 작업대와 최신 안전 센서가 장착된 장비를 운영하고 있으며,
+                정기적인 점검과 철저한 관리로 항상 안정적인 작업 환경을 유지하고 있어 장시간 고소작업에서도
+                흔들림 없는 정밀한 시공이 가능합니다. 또한 주·야간 작업 모두 대응 가능한 운영 체계를 갖추고 있어
+                급하게 발생하는 긴급 작업이나 일정 조정이 필요한 현장에도 신속하게 대응할 수 있으며,
+                지역 기반의 빠른 출동 시스템을 통해 고객의 불편을 최소화하고 있습니다.
               </p>
 
-              <div className="bg-amber/5 border border-amber/20 rounded-2xl p-6 mb-8">
-                <p className="text-amber font-bold text-sm uppercase tracking-wider mb-3">Vision</p>
-                <p className="text-gray-700 font-medium">청주 지역 최고의 고소작업차 전문 렌탈 업체로서 고객에게 신뢰받는 기업</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {['고객 만족도 100%', '최신 기술 장비', '전국 서비스 확대', '지속 가능한 성장'].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2.5">
-                    <CheckIcon />
-                    <span className="text-gray-700 text-sm font-medium">{item}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="text-gray-700 text-lg leading-[1.9]">
+                무엇보다도 청주스카이차는 모든 작업에서 &lsquo;안전&rsquo;을 최우선 가치로 두고 작업자와
+                현장 주변의 안전 확보를 가장 중요한 기준으로 삼고 있으며, 작업 전·중·후 철저한 안전 관리와 책임 있는 시공을 통해
+                신뢰받는 서비스를 제공하고자 노력하고 있습니다. 앞으로도 청주스카이차는 청주 지역을 대표하는
+                고소작업 전문 업체로서 고객의 요구에 성실하게 응답하고, 보다 안전하고 효율적인 작업 환경을
+                만들기 위해 끊임없이 장비와 기술을 개선하며 고객 만족을 넘어 신뢰로 보답하는 기업이 되겠습니다.
+              </p>
             </div>
 
-            <div className="relative">
-              <div className="relative h-[550px] rounded-3xl overflow-hidden shadow-2xl">
-                <Image src="/images/about-hero.jpg" alt="전문 설계" fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
-              </div>
-              {/* Floating stat card */}
-              <div className="absolute -bottom-8 -left-8 bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-                <div className="text-4xl font-black text-amber">15+</div>
-                <p className="text-gray-500 text-sm font-medium mt-1">년간의 경험</p>
-              </div>
-              <div className="absolute -top-6 -right-6 bg-navy rounded-2xl shadow-xl p-6 text-white">
-                <div className="text-4xl font-black text-amber">99%</div>
-                <p className="text-gray-400 text-sm font-medium mt-1">고객 만족도</p>
+            {/* Image sidebar */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="sticky top-24 space-y-6">
+                <div className="relative h-72 rounded-2xl overflow-hidden shadow-xl">
+                  <Image src="/images/hero.jpg" alt="건설 현장" fill className="object-cover" />
+                </div>
+                <div className="relative h-56 rounded-2xl overflow-hidden shadow-xl">
+                  <Image src="/images/about-hero.jpg" alt="전문 설계" fill className="object-cover" />
+                </div>
+                <div className="bg-navy rounded-2xl p-8 text-center">
+                  <p className="text-amber font-black text-3xl mb-2">24 / 365</p>
+                  <p className="text-gray-400 text-sm">주·야간 작업 대응 가능</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Core Values */}
-      <section className="py-24 md:py-32 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <p className="text-amber font-semibold text-sm tracking-wider uppercase mb-3">Core Values</p>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">핵심 가치</h2>
-            <p className="text-gray-500">청주스카이차가 지켜온 4가지 원칙</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {values.map((v, i) => (
-              <div key={i} className="group relative bg-white p-8 rounded-2xl border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all overflow-hidden">
-                <div className="absolute top-6 right-6 text-6xl font-black text-gray-100 group-hover:text-amber/10 transition-colors">{v.number}</div>
-                <div className="relative">
-                  <div className="w-14 h-14 rounded-2xl bg-amber/10 text-amber flex items-center justify-center mb-5 group-hover:bg-amber group-hover:text-white transition-all">
-                    {v.icon}
-                  </div>
-                  <h3 className="text-xl font-bold mb-3">{v.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{v.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="py-24 md:py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <p className="text-amber font-semibold text-sm tracking-wider uppercase mb-3">History</p>
-            <h2 className="text-3xl md:text-4xl font-bold">회사 연혁</h2>
-          </div>
-
-          {/* Desktop Timeline */}
-          <div className="hidden md:block max-w-4xl mx-auto">
-            <div className="relative">
-              <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber via-amber/50 to-gray-200" />
-              {timeline.map((item, i) => (
-                <div key={i} className={`relative flex items-center mb-16 last:mb-0 ${i % 2 === 0 ? '' : 'flex-row-reverse'}`}>
-                  <div className={`w-5/12 ${i % 2 === 0 ? 'text-right pr-12' : 'text-left pl-12'}`}>
-                    <div className="bg-gray-50 hover:bg-white hover:shadow-lg transition-all rounded-2xl p-6 border border-gray-100">
-                      <span className="text-amber font-black text-lg">{item.year}</span>
-                      <h3 className="text-lg font-bold mt-1 mb-1">{item.title}</h3>
-                      <p className="text-gray-500 text-sm">{item.desc}</p>
-                    </div>
-                  </div>
-                  <div className="absolute left-1/2 -translate-x-1/2 w-5 h-5 bg-amber rounded-full border-4 border-white shadow-md z-10" />
-                  <div className="w-5/12" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Mobile Timeline */}
-          <div className="md:hidden relative border-l-2 border-gray-200 ml-4">
-            {timeline.map((item, i) => (
-              <div key={i} className="relative pl-10 pb-12 last:pb-0">
-                <div className="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-amber border-4 border-white shadow-md" />
-                <div className="bg-gray-50 rounded-xl p-5">
-                  <span className="text-amber font-bold text-sm">{item.year}</span>
-                  <h3 className="text-lg font-bold mt-1 mb-1">{item.title}</h3>
-                  <p className="text-gray-500 text-sm">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="relative overflow-hidden">
-        <Image src="/images/hero.jpg" alt="" fill className="object-cover" />
-        <div className="absolute inset-0 bg-navy-dark/93" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-28">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { value: '15+', label: '년간의 경험', sub: 'Since 2009' },
-              { value: '5,000+', label: '누적 시공', sub: '현장 작업 완료' },
-              { value: '99%', label: '고객 만족도', sub: '재이용률 기준' },
-              { value: '24H', label: '신속배차', sub: '연중무휴 운영' },
-            ].map((s, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl md:text-5xl font-black text-gradient mb-2">{s.value}</div>
-                <p className="text-white font-medium">{s.label}</p>
-                <p className="text-gray-500 text-xs mt-1">{s.sub}</p>
-              </div>
-            ))}
-          </div>
+      {/* CTA */}
+      <section className="bg-amber">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-24 text-center">
+          <h2 className="text-3xl md:text-4xl font-black text-navy-dark mb-4">궁금한 점은 언제든 편하게 물어보세요!</h2>
+          <p className="text-navy-dark/70 text-lg mb-10">24시간 365일 친절 상담, 클릭시 전화 연결!</p>
+          <a
+            href="tel:010-5811-5297"
+            className="inline-flex items-center justify-center gap-3 bg-navy-dark hover:bg-navy text-white px-10 py-5 rounded-xl font-bold text-xl transition-all hover:shadow-xl"
+          >
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" /></svg>
+            010-5811-5297
+          </a>
         </div>
       </section>
     </div>

@@ -4,9 +4,9 @@ import Footer from '@/components/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '청주스카이차 - 고소작업차 전문 렌탈',
-  description: '청주 지역 최고의 고소작업차 전문 렌탈 업체. 24시간 신속배차, 안전최우선, 합리적 가격. 1톤~5톤 스카이차, 25톤 크레인 보유.',
-  keywords: ['청주', '스카이차', '고소작업차', '크레인', '렌탈', '청주스카이차'],
+  title: '청주 스카이차 - 스카이차·사다리차 고소작업 전문',
+  description: '청주를 중심으로 충북 전 지역 스카이차·사다리차 고소작업 전문 업체. 간판 설치·철거, 외벽 공사, 유리 시공, 도장, 방수, 패널 공사. 24시간 365일 상담. 010-5811-5297',
+  keywords: ['청주', '스카이차', '사다리차', '고소작업', '간판설치', '외벽공사', '청주스카이차'],
 };
 
 export default function RootLayout({

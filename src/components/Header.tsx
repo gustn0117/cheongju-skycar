@@ -9,9 +9,8 @@ export default function Header() {
   const pathname = usePathname();
 
   const nav = [
-    { label: '홈', href: '/' },
     { label: '회사소개', href: '/about' },
-    { label: '서비스안내', href: '/services' },
+    { label: '서비스 안내', href: '/services' },
     { label: '문의하기', href: '/contact' },
   ];
 
@@ -27,7 +26,7 @@ export default function Header() {
                 <path d="M2 12l10 5 10-5" />
               </svg>
             </div>
-            <span>청주스카이차</span>
+            <span>청주 스카이차</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -47,13 +46,13 @@ export default function Header() {
           </nav>
 
           <a
-            href="tel:010-1234-5678"
+            href="tel:010-5811-5297"
             className="hidden md:inline-flex items-center gap-2 bg-amber hover:bg-amber-dark text-navy-dark px-5 py-2 rounded-lg font-bold text-sm transition-all hover:shadow-lg hover:shadow-amber/20"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
             </svg>
-            010-1234-5678
+            010-5811-5297
           </a>
 
           <button
@@ -88,10 +87,10 @@ export default function Header() {
               </Link>
             ))}
             <a
-              href="tel:010-1234-5678"
+              href="tel:010-5811-5297"
               className="block text-center bg-amber hover:bg-amber-dark text-navy-dark px-4 py-3 rounded-lg font-bold text-sm mt-2 transition-colors"
             >
-              010-1234-5678
+              010-5811-5297
             </a>
           </div>
         </div>
