@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 const COOKIE_NAME = 'admin_session';
 const SECRET = process.env.ADMIN_SECRET || 'cheongju-skycar-default-secret-key';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'skycar2025!';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '1234';
 
 function generateToken(): string {
   const timestamp = Date.now().toString();
