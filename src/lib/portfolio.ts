@@ -6,7 +6,7 @@ export interface PortfolioItem {
   id: string;
   title: string;
   description: string;
-  image: string;
+  images: string[];
   visible: boolean;
   sortOrder: number;
   createdAt: string;
@@ -56,14 +56,14 @@ export function getItem(id: string): PortfolioItem | undefined {
   return data.items.find((item) => item.id === id);
 }
 
-export function createItem(input: { title: string; description: string; image: string }): PortfolioItem {
+export function createItem(input: { title: string; description: string; images: string[] }): PortfolioItem {
   const data = readData();
   const maxOrder = data.items.reduce((max, item) => Math.max(max, item.sortOrder), -1);
   const item: PortfolioItem = {
     id: crypto.randomUUID(),
     title: input.title,
     description: input.description,
-    image: input.image,
+    images: input.images,
     visible: true,
     sortOrder: maxOrder + 1,
     createdAt: new Date().toISOString(),
@@ -73,7 +73,7 @@ export function createItem(input: { title: string; description: string; image: s
   return item;
 }
 
-export function updateItem(id: string, input: Partial<Pick<PortfolioItem, 'title' | 'description' | 'image' | 'visible' | 'sortOrder'>>): PortfolioItem | null {
+export function updateItem(id: string, input: Partial<Pick<PortfolioItem, 'title' | 'description' | 'images' | 'visible' | 'sortOrder'>>): PortfolioItem | null {
   const data = readData();
   const idx = data.items.findIndex((item) => item.id === id);
   if (idx === -1) return null;
@@ -87,9 +87,9 @@ export function deleteItem(id: string): boolean {
   const idx = data.items.findIndex((item) => item.id === id);
   if (idx === -1) return false;
   const item = data.items[idx];
-  // Delete associated image file
-  if (item.image) {
-    const imgPath = path.join(UPLOADS_DIR, item.image);
+  // Delete associated image files
+  for (const img of item.images) {
+    const imgPath = path.join(UPLOADS_DIR, img);
     if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
   }
   data.items.splice(idx, 1);

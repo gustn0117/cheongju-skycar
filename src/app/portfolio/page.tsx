@@ -7,7 +7,7 @@ interface PortfolioItem {
   id: string;
   title: string;
   description: string;
-  image: string;
+  images: string[];
   createdAt: string;
 }
 
@@ -15,6 +15,7 @@ export default function Portfolio() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<PortfolioItem | null>(null);
+  const [slideIdx, setSlideIdx] = useState(0);
 
   useEffect(() => {
     fetch('/api/portfolio')
@@ -22,6 +23,11 @@ export default function Portfolio() {
       .then((data) => setItems(data.items))
       .finally(() => setLoading(false));
   }, []);
+
+  const openModal = (item: PortfolioItem) => {
+    setSelected(item);
+    setSlideIdx(0);
+  };
 
   return (
     <div>
@@ -65,16 +71,21 @@ export default function Portfolio() {
               {items.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => setSelected(item)}
+                  onClick={() => openModal(item)}
                   className="group relative bg-white rounded-2xl overflow-hidden card-lift border border-gray-100/80 text-left"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
-                      src={`/api/uploads/${item.image}`}
+                      src={`/api/uploads/${item.images[0]}`}
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {item.images.length > 1 && (
+                      <div className="absolute top-3 right-3 bg-dark/70 text-white text-xs font-medium px-2.5 py-1 rounded-full backdrop-blur-sm">
+                        +{item.images.length}
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="font-bold text-dark text-lg mb-1">{item.title}</h3>
@@ -106,7 +117,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox Modal with Carousel */}
       {selected && (
         <div
           className="fixed inset-0 z-[100] bg-dark/90 backdrop-blur-sm flex items-center justify-center p-4"
@@ -122,13 +133,54 @@ export default function Portfolio() {
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
             </button>
-            <div className="relative aspect-[16/10] overflow-hidden">
+
+            {/* Image area */}
+            <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
               <img
-                src={`/api/uploads/${selected.image}`}
+                src={`/api/uploads/${selected.images[slideIdx]}`}
                 alt={selected.title}
                 className="w-full h-full object-cover"
               />
+
+              {/* Arrows */}
+              {selected.images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setSlideIdx((i) => (i === 0 ? selected.images.length - 1 : i - 1))}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-dark/60 hover:bg-dark/80 text-white rounded-full flex items-center justify-center transition-colors"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                  </button>
+                  <button
+                    onClick={() => setSlideIdx((i) => (i === selected.images.length - 1 ? 0 : i + 1))}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-dark/60 hover:bg-dark/80 text-white rounded-full flex items-center justify-center transition-colors"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                  </button>
+
+                  {/* Dots */}
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    {selected.images.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setSlideIdx(i)}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          i === slideIdx ? 'bg-white w-5' : 'bg-white/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Counter */}
+              {selected.images.length > 1 && (
+                <div className="absolute top-3 left-3 bg-dark/70 text-white text-xs font-medium px-2.5 py-1 rounded-full backdrop-blur-sm">
+                  {slideIdx + 1} / {selected.images.length}
+                </div>
+              )}
             </div>
+
             <div className="p-6 md:p-8">
               <h3 className="font-black text-xl md:text-2xl text-dark mb-2">{selected.title}</h3>
               {selected.description && (

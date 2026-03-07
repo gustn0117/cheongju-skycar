@@ -22,11 +22,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   }
 
-  const { title, description, image } = body;
-  if (!title || !image) {
+  const { title, description, images } = body;
+  if (!title || !images?.length) {
     return NextResponse.json({ error: '제목과 이미지는 필수입니다.' }, { status: 400 });
   }
 
-  const item = createItem({ title, description: description || '', image });
+  const item = createItem({ title, description: description || '', images });
   return NextResponse.json({ item }, { status: 201 });
 }

@@ -7,7 +7,7 @@ interface PortfolioItem {
   id: string;
   title: string;
   description: string;
-  image: string;
+  images: string[];
   visible: boolean;
   sortOrder: number;
   createdAt: string;
@@ -20,9 +20,8 @@ export default function AdminDashboard() {
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState<PortfolioItem | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [formData, setFormData] = useState({ title: '', description: '', image: '' });
+  const [formData, setFormData] = useState({ title: '', description: '', images: [] as string[] });
   const fileRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -57,33 +56,40 @@ export default function AdminDashboard() {
     router.push('/admin/login');
   };
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (files: FileList) => {
     setUploading(true);
-    const fd = new FormData();
-    fd.append('file', file);
-    const res = await fetch('/api/upload', { method: 'POST', body: fd });
-    const data = await res.json();
-    setUploading(false);
-    if (data.filename) {
-      setFormData((prev) => ({ ...prev, image: data.filename }));
-      setPreviewUrl(`/api/uploads/${data.filename}`);
+    const newImages: string[] = [];
+    for (const file of Array.from(files)) {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.filename) newImages.push(data.filename);
     }
+    setFormData((prev) => ({ ...prev, images: [...prev.images, ...newImages] }));
+    setUploading(false);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleUpload(file);
+    const files = e.target.files;
+    if (files?.length) handleUpload(files);
+    e.target.value = '';
+  };
+
+  const removeImage = (idx: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== idx),
+    }));
   };
 
   const openForm = (item?: PortfolioItem) => {
     if (item) {
       setEditItem(item);
-      setFormData({ title: item.title, description: item.description, image: item.image });
-      setPreviewUrl(`/api/uploads/${item.image}`);
+      setFormData({ title: item.title, description: item.description, images: [...item.images] });
     } else {
       setEditItem(null);
-      setFormData({ title: '', description: '', image: '' });
-      setPreviewUrl('');
+      setFormData({ title: '', description: '', images: [] });
     }
     setShowForm(true);
   };
@@ -91,13 +97,12 @@ export default function AdminDashboard() {
   const closeForm = () => {
     setShowForm(false);
     setEditItem(null);
-    setFormData({ title: '', description: '', image: '' });
-    setPreviewUrl('');
+    setFormData({ title: '', description: '', images: [] });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title || !formData.image) return;
+    if (!formData.title || !formData.images.length) return;
 
     if (editItem) {
       await fetch(`/api/portfolio/${editItem.id}`, {
@@ -195,13 +200,18 @@ export default function AdminDashboard() {
               >
                 <div className="relative aspect-[4/3] bg-gray-100">
                   <img
-                    src={`/api/uploads/${item.image}`}
+                    src={`/api/uploads/${item.images[0]}`}
                     alt={item.title}
                     className="w-full h-full object-cover"
                   />
                   {!item.visible && (
                     <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
                       <span className="bg-gray-800 text-white text-xs px-3 py-1 rounded-full font-medium">숨김</span>
+                    </div>
+                  )}
+                  {item.images.length > 1 && (
+                    <div className="absolute top-2 right-2 bg-dark/70 text-white text-xs font-medium px-2 py-0.5 rounded-full">
+                      {item.images.length}장
                     </div>
                   )}
                 </div>
@@ -254,48 +264,62 @@ export default function AdminDashboard() {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
-              {/* Image Upload */}
+              {/* Images */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">이미지</label>
-                {previewUrl ? (
-                  <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-gray-100 mb-2">
-                    <img src={previewUrl} alt="미리보기" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPreviewUrl('');
-                        setFormData((prev) => ({ ...prev, image: '' }));
-                      }}
-                      className="absolute top-2 right-2 w-8 h-8 bg-dark/70 hover:bg-dark text-white rounded-full flex items-center justify-center"
-                    >
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                    </button>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  이미지 ({formData.images.length}장)
+                </label>
+
+                {/* Uploaded images grid */}
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {formData.images.map((img, idx) => (
+                      <div key={idx} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 group">
+                        <img src={`/api/uploads/${img}`} alt="" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(idx)}
+                          className="absolute top-1.5 right-1.5 w-6 h-6 bg-dark/70 hover:bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                        </button>
+                        {idx === 0 && (
+                          <div className="absolute bottom-1.5 left-1.5 bg-accent text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                            대표
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => fileRef.current?.click()}
-                    disabled={uploading}
-                    className="w-full aspect-[16/10] rounded-xl border-2 border-dashed border-gray-200 hover:border-accent/50 bg-gray-50 hover:bg-accent/5 flex flex-col items-center justify-center gap-2 transition-all"
-                  >
-                    {uploading ? (
-                      <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <svg className="w-8 h-8 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                          <polyline points="17 8 12 3 7 8" />
-                          <line x1="12" y1="3" x2="12" y2="15" />
-                        </svg>
-                        <span className="text-gray-400 text-sm">클릭하여 이미지 업로드</span>
-                      </>
-                    )}
-                  </button>
                 )}
+
+                {/* Add more button */}
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  disabled={uploading}
+                  className="w-full py-4 rounded-xl border-2 border-dashed border-gray-200 hover:border-accent/50 bg-gray-50 hover:bg-accent/5 flex items-center justify-center gap-2 transition-all"
+                >
+                  {uploading ? (
+                    <div className="w-6 h-6 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                      <span className="text-gray-400 text-sm">
+                        {formData.images.length === 0 ? '클릭하여 이미지 업로드' : '이미지 추가'}
+                      </span>
+                    </>
+                  )}
+                </button>
                 <input
                   ref={fileRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleFileChange}
                   className="hidden"
                 />
@@ -337,7 +361,7 @@ export default function AdminDashboard() {
                 </button>
                 <button
                   type="submit"
-                  disabled={!formData.title || !formData.image}
+                  disabled={!formData.title || !formData.images.length}
                   className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-dark text-white font-bold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {editItem ? '수정 완료' : '등록하기'}
