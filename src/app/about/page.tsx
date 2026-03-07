@@ -4,15 +4,17 @@ export default function About() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-[60vh] flex items-center">
-        <Image src="/images/crane.jpg" alt="작업 현장" fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-dark/98 via-navy/90 to-navy/60" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 w-full">
-          <p className="text-amber font-semibold text-sm tracking-wider uppercase mb-4 animate-fade-in-up">About Us</p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up delay-100">
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden">
+        <Image src="/images/crane.jpg" alt="작업 현장" fill className="object-cover scale-105" priority />
+        <div className="absolute inset-0 bg-gradient-to-br from-dark/95 via-dark/85 to-dark-light/70" />
+        <div className="absolute inset-0 bg-grid opacity-30" />
+        <div className="absolute bottom-0 right-[10%] w-80 h-80 bg-accent/10 rounded-full blur-[100px]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
+          <div className="section-divider mb-8 animate-fade-in-up" />
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up delay-100 leading-tight">
             청주 지역 고소작업의 기준,<br /><span className="text-gradient">청주 스카이차</span>
           </h1>
-          <p className="text-gray-300 text-lg max-w-2xl animate-fade-in-up delay-200">
+          <p className="text-white/60 text-lg max-w-2xl animate-fade-in-up delay-200">
             청주스카이차는 청주를 중심으로 충북 전 지역에서 스카이차·사다리차 고소작업 서비스를 제공하는 전문 업체입니다.
           </p>
         </div>
@@ -25,7 +27,7 @@ export default function About() {
             {/* Text */}
             <div className="lg:col-span-3 space-y-8">
               <div>
-                <div className="w-12 h-1 bg-amber rounded-full mb-8" />
+                <div className="section-divider mb-8" />
                 <p className="text-gray-700 text-lg leading-[1.9]">
                   청주스카이차는 청주를 중심으로 충북 전 지역에서 스카이차와 사다리차를 활용한 각종 고소작업 서비스를 제공하는 전문 업체로
                   간판 설치 및 철거, 외벽 공사, 유리 시공, 페인트 도장, 방수 작업, 건물 외벽 청소, 조립식 건물 및 판넬 시공,
@@ -61,15 +63,15 @@ export default function About() {
             {/* Image sidebar */}
             <div className="lg:col-span-2 space-y-6">
               <div className="sticky top-24 space-y-6">
-                <div className="relative h-72 rounded-2xl overflow-hidden shadow-xl">
+                <div className="relative h-72 rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
                   <Image src="/images/hero.jpg" alt="건설 현장" fill className="object-cover" />
                 </div>
-                <div className="relative h-56 rounded-2xl overflow-hidden shadow-xl">
+                <div className="relative h-56 rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
                   <Image src="/images/about-hero.jpg" alt="전문 설계" fill className="object-cover" />
                 </div>
-                <div className="bg-navy rounded-2xl p-8 text-center">
-                  <p className="text-amber font-black text-3xl mb-2">24 / 365</p>
-                  <p className="text-gray-400 text-sm">주·야간 작업 대응 가능</p>
+                <div className="bg-gradient-to-br from-dark to-dark-lighter rounded-2xl p-8 text-center ring-1 ring-white/5">
+                  <p className="text-gradient font-black text-4xl mb-2">24 / 365</p>
+                  <p className="text-white/50 text-sm">주·야간 작업 대응 가능</p>
                 </div>
               </div>
             </div>
@@ -78,13 +80,15 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="bg-amber">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-24 text-center">
-          <h2 className="text-3xl md:text-4xl font-black text-navy-dark mb-4">궁금한 점은 언제든 편하게 물어보세요!</h2>
-          <p className="text-navy-dark/70 text-lg mb-10">24시간 365일 친절 상담, 클릭시 전화 연결!</p>
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-accent to-accent-dark" />
+        <div className="absolute inset-0 bg-grid opacity-10" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-24 text-center">
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">궁금한 점은 언제든 편하게 물어보세요!</h2>
+          <p className="text-white/80 text-lg mb-10">24시간 365일 친절 상담, 클릭시 전화 연결!</p>
           <a
             href="tel:010-5811-5297"
-            className="inline-flex items-center justify-center gap-3 bg-navy-dark hover:bg-navy text-white px-10 py-5 rounded-xl font-bold text-xl transition-all hover:shadow-xl"
+            className="inline-flex items-center justify-center gap-3 bg-dark hover:bg-dark-light text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all hover:shadow-2xl active:scale-[0.98]"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" /></svg>
             010-5811-5297
