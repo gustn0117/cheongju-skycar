@@ -31,7 +31,19 @@ function readData(): PortfolioData {
     return { items: [] };
   }
   const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-  return JSON.parse(raw);
+  const data = JSON.parse(raw) as PortfolioData;
+  // Migrate old `image` field to `images` array
+  let migrated = false;
+  for (const item of data.items) {
+    const legacy = item as PortfolioItem & { image?: string };
+    if (!item.images && legacy.image) {
+      item.images = [legacy.image];
+      delete legacy.image;
+      migrated = true;
+    }
+  }
+  if (migrated) writeData(data);
+  return data;
 }
 
 function writeData(data: PortfolioData) {
