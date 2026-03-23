@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const isAdmin = await isAuthenticated();
   const all = req.nextUrl.searchParams.get('all') === 'true';
 
-  const items = isAdmin && all ? getAllItems() : getVisibleItems();
+  const items = isAdmin && all ? await getAllItems() : await getVisibleItems();
   return NextResponse.json({ items });
 }
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   if (body.action === 'reorder') {
-    reorderItems(body.ids);
+    await reorderItems(body.ids);
     return NextResponse.json({ success: true });
   }
 
@@ -27,6 +27,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: '제목과 이미지는 필수입니다.' }, { status: 400 });
   }
 
-  const item = createItem({ title, description: description || '', images });
+  const item = await createItem({ title, description: description || '', images });
   return NextResponse.json({ item }, { status: 201 });
 }

@@ -12,7 +12,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await req.json();
-  const item = updateItem(id, body);
+  const item = await updateItem(id, body);
 
   if (!item) {
     return NextResponse.json({ error: '항목을 찾을 수 없습니다.' }, { status: 404 });
@@ -30,7 +30,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const deleted = deleteItem(id);
+  const deleted = await deleteItem(id);
 
   if (!deleted) {
     return NextResponse.json({ error: '항목을 찾을 수 없습니다.' }, { status: 404 });

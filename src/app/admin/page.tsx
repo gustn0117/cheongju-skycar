@@ -9,8 +9,8 @@ interface PortfolioItem {
   description: string;
   images: string[];
   visible: boolean;
-  sortOrder: number;
-  createdAt: string;
+  sort_order: number;
+  created_at: string;
 }
 
 export default function AdminDashboard() {

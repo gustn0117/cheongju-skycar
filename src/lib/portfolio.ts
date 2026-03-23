@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
+import { supabase, STORAGE_BUCKET } from './supabase';
 import crypto from 'crypto';
+import path from 'path';
 
 export interface PortfolioItem {
   id: string;
@@ -8,126 +8,115 @@ export interface PortfolioItem {
   description: string;
   images: string[];
   visible: boolean;
-  sortOrder: number;
-  createdAt: string;
+  sort_order: number;
+  created_at: string;
 }
 
-interface PortfolioData {
-  items: PortfolioItem[];
+export async function getVisibleItems(): Promise<PortfolioItem[]> {
+  const { data } = await supabase
+    .from('portfolio')
+    .select('*')
+    .eq('visible', true)
+    .order('sort_order');
+  return data || [];
 }
 
-const DATA_DIR = path.join(process.cwd(), 'data');
-const DATA_FILE = path.join(DATA_DIR, 'portfolio.json');
-const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
-
-function ensureDirs() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+export async function getAllItems(): Promise<PortfolioItem[]> {
+  const { data } = await supabase
+    .from('portfolio')
+    .select('*')
+    .order('sort_order');
+  return data || [];
 }
 
-function readData(): PortfolioData {
-  ensureDirs();
-  if (!fs.existsSync(DATA_FILE)) {
-    return { items: [] };
-  }
-  const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-  const data = JSON.parse(raw) as PortfolioData;
-  // Migrate old `image` field to `images` array
-  let migrated = false;
-  for (const item of data.items) {
-    const legacy = item as PortfolioItem & { image?: string };
-    if (!item.images && legacy.image) {
-      item.images = [legacy.image];
-      delete legacy.image;
-      migrated = true;
-    }
-  }
-  if (migrated) writeData(data);
+export async function getItem(id: string): Promise<PortfolioItem | null> {
+  const { data } = await supabase
+    .from('portfolio')
+    .select('*')
+    .eq('id', id)
+    .single();
   return data;
 }
 
-function writeData(data: PortfolioData) {
-  ensureDirs();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+export async function createItem(input: { title: string; description: string; images: string[] }): Promise<PortfolioItem> {
+  // Get max sort_order
+  const { data: maxRow } = await supabase
+    .from('portfolio')
+    .select('sort_order')
+    .order('sort_order', { ascending: false })
+    .limit(1)
+    .single();
+
+  const nextOrder = (maxRow?.sort_order ?? -1) + 1;
+
+  const { data, error } = await supabase
+    .from('portfolio')
+    .insert({
+      title: input.title,
+      description: input.description,
+      images: input.images,
+      sort_order: nextOrder,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 }
 
-export function getVisibleItems(): PortfolioItem[] {
-  const data = readData();
-  return data.items
-    .filter((item) => item.visible)
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+export async function updateItem(id: string, input: Partial<Pick<PortfolioItem, 'title' | 'description' | 'images' | 'visible' | 'sort_order'>>): Promise<PortfolioItem | null> {
+  const { data, error } = await supabase
+    .from('portfolio')
+    .update(input)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) return null;
+  return data;
 }
 
-export function getAllItems(): PortfolioItem[] {
-  const data = readData();
-  return data.items.sort((a, b) => a.sortOrder - b.sortOrder);
-}
+export async function deleteItem(id: string): Promise<boolean> {
+  // Get item to delete storage files
+  const item = await getItem(id);
+  if (!item) return false;
 
-export function getItem(id: string): PortfolioItem | undefined {
-  const data = readData();
-  return data.items.find((item) => item.id === id);
-}
-
-export function createItem(input: { title: string; description: string; images: string[] }): PortfolioItem {
-  const data = readData();
-  const maxOrder = data.items.reduce((max, item) => Math.max(max, item.sortOrder), -1);
-  const item: PortfolioItem = {
-    id: crypto.randomUUID(),
-    title: input.title,
-    description: input.description,
-    images: input.images,
-    visible: true,
-    sortOrder: maxOrder + 1,
-    createdAt: new Date().toISOString(),
-  };
-  data.items.push(item);
-  writeData(data);
-  return item;
-}
-
-export function updateItem(id: string, input: Partial<Pick<PortfolioItem, 'title' | 'description' | 'images' | 'visible' | 'sortOrder'>>): PortfolioItem | null {
-  const data = readData();
-  const idx = data.items.findIndex((item) => item.id === id);
-  if (idx === -1) return null;
-  Object.assign(data.items[idx], input);
-  writeData(data);
-  return data.items[idx];
-}
-
-export function deleteItem(id: string): boolean {
-  const data = readData();
-  const idx = data.items.findIndex((item) => item.id === id);
-  if (idx === -1) return false;
-  const item = data.items[idx];
-  // Delete associated image files
-  for (const img of item.images) {
-    const imgPath = path.join(UPLOADS_DIR, img);
-    if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+  // Delete images from storage
+  if (item.images.length > 0) {
+    await supabase.storage.from(STORAGE_BUCKET).remove(item.images);
   }
-  data.items.splice(idx, 1);
-  writeData(data);
-  return true;
+
+  const { error } = await supabase
+    .from('portfolio')
+    .delete()
+    .eq('id', id);
+
+  return !error;
 }
 
-export function reorderItems(ids: string[]) {
-  const data = readData();
-  ids.forEach((id, index) => {
-    const item = data.items.find((i) => i.id === id);
-    if (item) item.sortOrder = index;
-  });
-  writeData(data);
+export async function reorderItems(ids: string[]) {
+  const updates = ids.map((id, index) =>
+    supabase.from('portfolio').update({ sort_order: index }).eq('id', id)
+  );
+  await Promise.all(updates);
 }
 
-export function saveUploadedFile(buffer: Buffer, originalName: string): string {
-  ensureDirs();
+export async function saveUploadedFile(buffer: Buffer, originalName: string): Promise<string> {
   const ext = path.extname(originalName).toLowerCase() || '.jpg';
   const filename = `${crypto.randomUUID()}${ext}`;
-  fs.writeFileSync(path.join(UPLOADS_DIR, filename), buffer);
+
+  const { error } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .upload(filename, buffer, {
+      contentType: `image/${ext.replace('.', '')}`,
+      upsert: false,
+    });
+
+  if (error) throw error;
   return filename;
 }
 
-export function getUploadPath(filename: string): string | null {
-  const filePath = path.join(UPLOADS_DIR, path.basename(filename));
-  if (!fs.existsSync(filePath)) return null;
-  return filePath;
+export function getPublicUrl(filename: string): string {
+  const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(filename);
+  return data.publicUrl;
 }

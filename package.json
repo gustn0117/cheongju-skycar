@@ -9,10 +9,16 @@
     "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["청주", "스카이차", "고소작업차", "렌탈"],
+  "keywords": [
+    "청주",
+    "스카이차",
+    "고소작업차",
+    "렌탈"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^2.100.0",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^25.3.5",
     "@types/react": "^19.2.14",

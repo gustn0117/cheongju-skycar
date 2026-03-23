@@ -8,7 +8,7 @@ interface PortfolioItem {
   title: string;
   description: string;
   images: string[];
-  createdAt: string;
+  created_at: string;
 }
 
 export default function Portfolio() {

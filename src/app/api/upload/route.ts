@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const filename = saveUploadedFile(buffer, file.name);
+  const filename = await saveUploadedFile(buffer, file.name);
 
   return NextResponse.json({ filename });
 }
